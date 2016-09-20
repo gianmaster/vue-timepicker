@@ -14,7 +14,11 @@ export default {
     hideClearButton: {type: Boolean},
     format: {type: String},
     minuteInterval: {type: Number},
-    secondInterval: {type: Number}
+    secondInterval: {type: Number},
+    hourRange: {type: Array},
+    hourCustomInterval: {type: Array},
+    minuteCustomInterval: {type: Array},
+    secondCustomInterval: {type: Array}
   },
 
   data () {
@@ -129,10 +133,22 @@ export default {
     },
 
     renderHoursList () {
-      const hoursCount = (this.hourType === 'h' || this.hourType === 'hh') ? 12 : 24
       this.hours = []
-      for (let i = 0; i < hoursCount; i++) {
-        this.hours.push(this.formatValue(this.hourType, i))
+      if (this.hourCustomInterval) {
+        this.hours = this.hourCustomInterval
+      } else {
+        if (this.hourRange) {
+          const start = parseInt(this.hourRange[0])
+          const end = parseInt(this.hourRange[1])
+          for (let i = start; i < end; i++) {
+            this.hours.push(this.formatValue(this.hourType, i))
+          }
+        } else {
+          const hoursCount = (this.hourType === 'h' || this.hourType === 'hh') ? 12 : 24
+          for (let i = 0; i < hoursCount; i++) {
+            this.hours.push(this.formatValue(this.hourType, i))
+          }
+        }
       }
     },
 
@@ -163,11 +179,17 @@ export default {
         this.seconds = []
       }
 
-      for (let i = 0; i < 60; i += interval) {
-        if (listType === 'minute') {
-          this.minutes.push(this.formatValue(this.minuteType, i))
-        } else {
-          this.seconds.push(this.formatValue(this.secondType, i))
+      if (this.minuteCustomInterval) {
+        this.minutes = this.minuteCustomInterval
+      } else if (this.secondCustomInterval) {
+        this.seconds = this.secondCustomInterval
+      } else {
+        for (let i = 0; i < 60; i += interval) {
+          if (listType === 'minute') {
+            this.minutes.push(this.formatValue(this.minuteType, i))
+          } else {
+            this.seconds.push(this.formatValue(this.secondType, i))
+          }
         }
       }
     },

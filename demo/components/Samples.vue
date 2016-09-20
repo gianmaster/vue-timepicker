@@ -172,6 +172,10 @@ export default {
         <p>
           <vue-timepicker format="hh:mm:ss" :minute-interval="5" :second-interval="10"></vue-timepicker>
         </p>
+        <b>Hour Range (8 to 12) & Customs Intervals {10,40} minutes</b>
+        <p>
+          <vue-timepicker format="HH:mm" :minute-custom-interval="[10, 40]" :hour-range="[8, 13]"></vue-timepicker>
+        </p>
       </div>
     </div>
 
